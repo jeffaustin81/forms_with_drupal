@@ -1,0 +1,33 @@
+<?php
+
+function sum_menu() {
+  $items['sum'] = array(
+    'title' => 'Calculate Sum',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('sum_form'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+function sum_form() {
+  $form['left_number'] = array(
+    '#title' => 'Left number',
+    '#type' => 'textfield',
+    '#description' => t('Please enter your starting number.'),
+  );
+
+  $form['right_number'] = array(
+    '#title' => 'Right number',
+    '#type' => 'textfield',
+    '#description' => t('Please enter a number to add to the starting number.'),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Calculate Sum',
+  );
+
+  return $form;
+}
