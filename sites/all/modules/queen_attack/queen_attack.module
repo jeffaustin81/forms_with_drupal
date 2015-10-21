@@ -28,7 +28,7 @@ function queen_attack_form() {
     '#title' => 'Queen Row',
     '#type' => 'select',
     '#options' => array(1, 2, 3, 4, 5, 6, 7, 8),
-    '#description' => t('Please input the row (1-8) of the queen'),
+    '#description' => t('Please input the row of the queen'),
   );
   $form['attack_column'] = array(
     '#title' => 'Attacked Column',
@@ -40,7 +40,7 @@ function queen_attack_form() {
     '#title' => 'Attacked Row',
     '#type' => 'select',
     '#options' => array(1, 2, 3, 4, 5, 6, 7, 8),
-    '#description' => t('Please input the row (1-8 of the piece to attack'),
+    '#description' => t('Please input the row of the piece to attack'),
   );
   $form['submit'] = array(
       '#type' => 'submit',
