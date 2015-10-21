@@ -20,22 +20,26 @@ function queen_attack_menu() {
 function queen_attack_form() {
   $form['queen_column'] = array(
     '#title' => 'Queen Column',
-    '#type' => 'textfield',
-    '#description' => t('Please input the column (a-h) of the queen'),
+    '#type' => 'select',
+    '#options' => array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'),
+    '#description' => t('Please input the column of the queen'),
   );
   $form['queen_row'] = array(
     '#title' => 'Queen Row',
-    '#type' => 'textfield',
+    '#type' => 'select',
+    '#options' => array(1, 2, 3, 4, 5, 6, 7, 8),
     '#description' => t('Please input the row (1-8) of the queen'),
   );
   $form['attack_column'] = array(
     '#title' => 'Attacked Column',
-    '#type' => 'textfield',
-    '#description' => t('Please input the column (a-h) of the piece to attack'),
+    '#type' => 'select',
+    '#options' => array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'),
+    '#description' => t('Please input the column of the piece to attack'),
   );
   $form['attack_row'] = array(
     '#title' => 'Attacked Row',
-    '#type' => 'textfield',
+    '#type' => 'select',
+    '#options' => array(1, 2, 3, 4, 5, 6, 7, 8),
     '#description' => t('Please input the row (1-8 of the piece to attack'),
   );
   $form['submit'] = array(
@@ -46,48 +50,18 @@ function queen_attack_form() {
 }
 
 function queen_attack_form_submit($form, &$form_state) {
-  $queen_column = strtolower($form_state['values']['queen_column']);
+  $queen_column = $form_state['values']['queen_column'];
   $queen_row = $form_state['values']['queen_row'];
-  $attack_column = strtolower($form_state['values']['attack_column']);
+  $attack_column = $form_state['values']['attack_column'];
   $attack_row = $form_state['values']['attack_row'];
-
-  $column_array = array(
-    'a' => 1,
-    'b' => 2,
-    'c' => 3,
-    'd' => 4,
-    'e' => 5,
-    'f' => 6,
-    'g' => 7,
-    'h' => 8,
-  );
-
-  $queen_column_value = $column_array[$queen_column];
-  $attack_column_value = $column_array[$attack_column];
 
   if(($queen_column === $attack_column) || ($queen_row === $attack_row)) {
     $result = true;
-  } elseif(abs($queen_column_value-$attack_column_value) === abs($queen_row-$attack_row)) {
+  } elseif(abs($queen_column-$attack_column) === abs($queen_row-$attack_row)) {
     $result = true;
   } else {
     $result = false;
   }
-
-  // for($i=$queen_column_value; $i<=8; $i++) {
-  //   if($i === $attack_column_value) {
-  //     if( ($queen_row+($i-$queen_column_value) === $attack_row) ||  ($queen_row-($i-$queen_column_value) === $attack_row) ) {
-  //     $output = true;
-  //     }
-  //   }
-  // }
-  //
-  // for($j=$queen_column_value; $j>0; $j--) {
-  //   if($j === $attack_column_value) {
-  //     if( ($queen_row+($queen_column_value-$j) === $attack_row) ||  ($queen_row-($queen_column_value-$j) === $attack_row) ) {
-  //     $output = true;
-  //     }
-  //   }
-  // }
 
   $_SESSION['queen_attack_output'] = $result;
   $form_state['redirect'] = 'queen_attack_results_page';
