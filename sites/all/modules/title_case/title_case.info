@@ -1,0 +1,5 @@
+name = Title Case
+description = Display a user input in title case.
+package = Epicodus Examples
+core = 7.x
+files[] = title_case.module
