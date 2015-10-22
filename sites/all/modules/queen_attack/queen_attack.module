@@ -1,5 +1,10 @@
 <?php
 
+
+/////////
+///////////// MENU
+/////////
+//////////////////////////////////////////////////////////////////////////////
 function queen_attack_menu() {
   $items['queen_attack'] = array(
     'title' => 'Queen Attack',
@@ -22,7 +27,7 @@ function queen_attack_form() {
     '#title' => 'Queen Column',
     '#type' => 'textfield',
     '#description' => t('Please input the column of the queen'),
-    '#element_validate' => array('element_validate_char'),
+    '#element_validate' => array('element_validate_char', 'element_validate_location'),
     '#required' => TRUE,
   );
 
@@ -30,7 +35,7 @@ function queen_attack_form() {
     '#title' => 'Attacked Column',
     '#type' => 'textfield',
     '#description' => t('Please input the column of the piece to attack'),
-    '#element_validate' => array('element_validate_char'),
+    '#element_validate' => array('element_validate_char', 'element_validate_location'),
     '#required' => TRUE,
   );
 
@@ -41,6 +46,11 @@ function queen_attack_form() {
   return $form;
 }
 
+
+////////////
+///////////////////FORM VALIDATION
+////////////
+///////////////////////////////////////////////////////////////////////////////
 function element_validate_char($element) {
   if (strlen($element['#value']) != 2) {
     form_error($element, t('Please enter the two character coordinates of each piece!'));
@@ -50,6 +60,16 @@ function element_validate_char($element) {
   }
 }
 
+function element_validate_location($element, &$form_state) {
+  if ($form_state['values']['queen_coordinates'] === $form_state['values']['attack_coordinates']) {
+    form_error($element, t('The queen can not attack a piece it is on!'));
+  }
+}
+
+////////////
+////////////////////////// FORM SUBMIT
+///////////
+///////////////////////////////////////////////////////////////////////////////
 function queen_attack_form_submit($form, &$form_state) {
   $queen_coordinates = $form_state['values']['queen_coordinates'];
   $attack_coordinates = $form_state['values']['attack_coordinates'];
@@ -80,6 +100,10 @@ function queen_attack_form_submit($form, &$form_state) {
   $form_state['redirect'] = 'queen_attack_results_page';
 }
 
+/////////////////
+////////////////////// FORM RESULTS
+////////////////
+///////////////////////////////////////////////////////////////////////////////
 function queen_attack_results() {
   $result_display = $_SESSION['queen_attack_output'];
   if($result_display === TRUE) {
