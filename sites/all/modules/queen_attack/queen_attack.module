@@ -18,30 +18,22 @@ function queen_attack_menu() {
 }
 
 function queen_attack_form() {
-  $form['queen_column'] = array(
+  $form['queen_coordinates'] = array(
     '#title' => 'Queen Column',
-    '#type' => 'select',
-    '#options' => array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'),
+    '#type' => 'textfield',
     '#description' => t('Please input the column of the queen'),
+    '#element_validate' => array('element_validate_char'),
+    '#required' => TRUE,
   );
-  $form['queen_row'] = array(
-    '#title' => 'Queen Row',
-    '#type' => 'select',
-    '#options' => array(1, 2, 3, 4, 5, 6, 7, 8),
-    '#description' => t('Please input the row of the queen'),
-  );
-  $form['attack_column'] = array(
+
+  $form['attack_coordinates'] = array(
     '#title' => 'Attacked Column',
-    '#type' => 'select',
-    '#options' => array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'),
+    '#type' => 'textfield',
     '#description' => t('Please input the column of the piece to attack'),
+    '#element_validate' => array('element_validate_char'),
+    '#required' => TRUE,
   );
-  $form['attack_row'] = array(
-    '#title' => 'Attacked Row',
-    '#type' => 'select',
-    '#options' => array(1, 2, 3, 4, 5, 6, 7, 8),
-    '#description' => t('Please input the row of the piece to attack'),
-  );
+
   $form['submit'] = array(
       '#type' => 'submit',
       '#value' => 'Go',
@@ -49,11 +41,32 @@ function queen_attack_form() {
   return $form;
 }
 
+function element_validate_char($element) {
+  if (strlen($element['#value']) != 2) {
+    form_error($element, t('Please enter the two character coordinates of each piece!'));
+  }
+  if (!preg_match("/[a-h]/", $element['#value']) || !preg_match("/[1-8]/", $element['#value'][1])) {
+    form_error($element, t('Enter valid coordinates!'));
+  }
+}
+
 function queen_attack_form_submit($form, &$form_state) {
-  $queen_column = $form_state['values']['queen_column'];
-  $queen_row = $form_state['values']['queen_row'];
-  $attack_column = $form_state['values']['attack_column'];
-  $attack_row = $form_state['values']['attack_row'];
+  $queen_coordinates = $form_state['values']['queen_coordinates'];
+  $attack_coordinates = $form_state['values']['attack_coordinates'];
+
+  $queen_array = str_split(strtolower($queen_coordinates));
+  $attack_array = str_split(strtolower($attack_coordinates));
+
+
+  $letter_values = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5, 'f' => 6, 'g' => 7, 'h' => 8);
+
+  $queen_column = $letter_values[$queen_array[0]];
+  $queen_row = $queen_array[1];
+
+  $attack_column = $letter_values[$attack_array[0]];
+  $attack_row = $attack_array[1];
+
+
 
   if(($queen_column === $attack_column) || ($queen_row === $attack_row)) {
     $result = true;
